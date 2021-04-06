@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/new', [\App\Http\Controllers\TicketController::class, 'create']);
-Route::get('/claim/{ticket_id}', [\App\Http\Controllers\TicketController::class, 'show']);
 
+Route::get('/new', [TicketController::class, 'create'])->middleware('auth');
+Route::post('/store', [TicketController::class, 'store'])->middleware('auth');
+Route::get('/claim/{ticket_id}', [TicketController::class, 'claimForm'])->middleware('auth');;
+Route::post('/claim/confirm', [TicketController::class, 'claimABit'])->middleware('auth');;
+
+
+Auth::routes(['register' => true]);
+
+Route::get('/home', 'HomeController@index')->name('home');
